@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./main.css">
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="canvas">
+    <div class="bg-sky"></div>
+    <table class="ground-grid" style="left: 0px; bottom: 0px;"></table>
+    <canvas class="bg-canvas" width="1056" height="224" style="left: 0px; bottom: 0px;"></canvas>
+    <div class="player player--idle" style="left:32px; bottom: 64px;"></div>
+    <div class="tips-box" style="left: 0px; bottom: 0px; display: none;"></div>
+    <div class="text-box"></div>
+    <div class="touch-button voice-button" style="background-color: rgba(148, 148, 148, 0.521);">🔈</div>
+    <div class="touch-button left-button">←</div>
+    <div class="touch-button right-button">→</div>
+    <div class="touch-button jump-button">A</div>
+    <div class="touch-button act-button">B</div>
+  </div>
+  <script type="module">
+    import { Player, Ground, CollisionProcesser, AudioPlayer, TextProcesser, NPC } from './sprites.js';
+
+    const GROUND_CANVAS_WIDTH = 33;
+    const GROUND_CANVAS_HEIGHT = 7;
+    const DEF_GRID_WIDTH = 32;
+    const DEF_GIRD_HEIGHT = 32;
+
+    const groundGrid = document.getElementsByClassName('ground-grid')[0];
+    const bgCanvas = document.getElementsByClassName('bg-canvas')[0];
+    const bgSky = document.getElementsByClassName('bg-sky')[0];
+    const playerDOM = document.getElementsByClassName('player')[0];
+    const tipsDOM = document.getElementsByClassName('tips-box')[0];
+    const textBox = document.getElementsByClassName('text-box')[0];
+
+    const voiceButton = document.getElementsByClassName('voice-button')[0];
+    const leftButton = document.getElementsByClassName('left-button')[0];
+    const rightButton = document.getElementsByClassName('right-button')[0];
+    const actButton = document.getElementsByClassName('act-button')[0];
+    const jumpButton = document.getElementsByClassName('jump-button')[0];
+
+    const groundUnits = [];
+    const npcUnits = [];
+
+    const audioPlayer = new AudioPlayer([
+      { id: 'jump', src: './audio/jump.wav' },
+      { id: 'bgm', src: './audio/bgm.mp3' },
+      { id: 'walk', src: './audio/walk-in-grass.mp3' },
+    ]);
+    const textProcesser = new TextProcesser({ dom: textBox });
+    const player = new Player({
+      nw: { x: 37, y: 86 },
+      se: { x: 59, y: 64 },
+      dom: playerDOM,
+      gdom: groundGrid,
+      bgdom: bgCanvas,
+      tipsdom: tipsDOM,
+      bgskydom: bgSky,
+      windowdom: window,
+      npcUnits: npcUnits,
+      groundUnits: groundUnits,
+      audioPlayer: audioPlayer,
+      textProcesser: textProcesser,
+      collisionProcesser: new CollisionProcesser(),
+    });
+
+    const groundMap = [
+      '                                 ',
+      '                                 ',
+      'I                ABBBBC         I',
+      'J            rsrseeeeef         J',
+      'J          abeeeeeeeeef         J',
+      'ABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBC',
+      'ghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhq',
+    ]
+    const backgroundMap = {
+      metadata: {},
+      coor: [
+        { sx: 805, sy: 149, width: 136, height: 43, dx: 580 }, //墙
+        { sx: 805, sy: 149, width: 136, height: 43, dx: 400 }, //墙
+        { sx: 356, sy: 580, width: 57, height: 28, dx: 40 }, //草
+        { sx: 452, sy: 573, width: 89, height: 35, dx: 80 },
+        { sx: 576, sy: 572, width: 95, height: 36, dx: 150 },
+        { sx: 356, sy: 580, width: 57, height: 28, dx: 180 }, //草
+        { sx: 452, sy: 573, width: 89, height: 35, dx: 200 },
+        { sx: 576, sy: 572, width: 95, height: 36, dx: 230 },
+        { sx: 693, sy: 471, width: 120, height: 137, dx: 80 }, // 大树
+        { sx: 832, sy: 447, width: 153, height: 161, dx: 200 }, // 大树
+        { sx: 703, sy: 115, width: 35, height: 77, dx: 832 }, // 女神像
+        { sx: 32, sy: 165, width: 87, height: 91, dx: 900 }, // 水井
+        { sx: 134, sy: 231, width: 21, height: 25, dx: 990 }, // 水井桶
+        { sx: 816, sy: 365, width: 33, height: 19, dx: 500 }, //石头
+        { sx: 874, sy: 358, width: 46, height: 26, dx: 315 },
+        { sx: 969, sy: 31, width: 42, height: 97, dx: 380 }, //路灯
+        { sx: 969, sy: 6, width: 13, height: 18, dx: 410, dy: 85 },
+        { sx: 869, sy: 262, width: 22, height: 58, dx: 600 }, //向日葵
+        { sx: 899, sy: 257, width: 26, height: 63, dx: 640 },
+        { sx: 930, sy: 261, width: 27, height: 59, dx: 680 },
+        { sx: 189, sy: 163, width: 68, height: 61, dx: 430 }, //告示栏
+        { sx: 260, sy: 166, width: 11, height: 15, dx: 435, dy: 110 },
+        { sx: 127, sy: 29, width: 35, height: 35, dx: 740 }, // 箱子
+        { sx: 127, sy: 29, width: 35, height: 35, dx: 775 }, // 箱子
+        { sx: 195, sy: 29, width: 27, height: 35, dx: 748, dy: 90 }, // 桶
+        { sx: 195, sy: 29, width: 27, height: 35, dx: 775, dy: 90 }, // 桶
+        { sx: 30, sy: 515, width: 35, height: 29, dx: 640, dy: 35 }, // 宝箱
+        { sx: 356, sy: 580, width: 57, height: 28, dx: 660, dy: 37 }, //草
+        { sx: 452, sy: 573, width: 89, height: 35, dx: 570, dy: 30 },
+        { sx: 354, sy: 265, width: 61, height: 23, dx: 60 }, //篝火
+      ]
+    }
+
+    function loadBackground() {
+      let img1 = new Image();
+      img1.src = './img/Texture/props.png'
+      img1.onload = function () {
+        const canvas = bgCanvas.getContext('2d');
+
+        backgroundMap.coor.forEach(e => {
+          canvas.drawImage(img1, e.sx, e.sy, e.width, e.height,
+            e.dx, (e.dy) ? e.dy : 160 - e.height, e.width, e.height);
+        });
+      };
+    }
+    function loadGroundGrid() {
+      for (let y = 0; y < GROUND_CANVAS_HEIGHT; y++) {
+        const rowArr = groundMap[y].split('');
+        const rowDOM = document.createElement('tr');
+        for (let x = 0; x < GROUND_CANVAS_WIDTH; x++) {
+          const col = rowArr[x];
+          const colDOM = document.createElement('td');
+          if (col !== ' ') {
+            if (/[a-z]/i.test(col)) colDOM.classList.add(`ground-canvas_grass${col.toLowerCase()}`);
+            if (/[ef]/.test(col)) { }
+            else if (/[A-Z]/.test(col)) {
+              groundUnits.push(new Ground({
+                nw: { x: DEF_GRID_WIDTH * x, y: DEF_GIRD_HEIGHT * (GROUND_CANVAS_HEIGHT - y) },
+                se: { x: DEF_GRID_WIDTH * (x + 1), y: DEF_GIRD_HEIGHT * (GROUND_CANVAS_HEIGHT - y - 1) },
+                dom: colDOM,
+              }));
+            } else {
+              groundUnits.push(new Ground({
+                nw: { x: DEF_GRID_WIDTH * x, y: DEF_GIRD_HEIGHT * (GROUND_CANVAS_HEIGHT - y) },
+                se: { x: DEF_GRID_WIDTH * (x + 1), y: DEF_GIRD_HEIGHT * (GROUND_CANVAS_HEIGHT - y) - 5 },
+                dom: colDOM,
+                type: 'board',
+              }));
+            }
+          }
+          rowDOM.appendChild(colDOM);
+        }
+        groundGrid.appendChild(rowDOM);
+      }
+    }
+    function loadTempNPCs() {
+      npcUnits.push(new NPC({
+        nw: { x: 80, y: GROUND_CANVAS_HEIGHT * DEF_GIRD_HEIGHT - 23 },
+        se: { x: 80 + 120, y: GROUND_CANVAS_HEIGHT * DEF_GIRD_HEIGHT - 23 - 137 },
+        text: {
+          talkedCount: 0,
+          start: ['t01', 't11'],
+          t01: { text: '......', selection: '', next: 'end' },
+          t11: { text: '这棵树充满了古老的圣洁.', selection: '', next: 't12' },
+          t12: { text: '它的外表体现了原始黄金的性质.', selection: '', next: 'end' },
+        }
+      }));
+      npcUnits.push(new NPC({
+        nw: { x: 430, y: GROUND_CANVAS_HEIGHT * DEF_GIRD_HEIGHT - 160 + 61 },
+        se: { x: 430 + 68, y: GROUND_CANVAS_HEIGHT * DEF_GIRD_HEIGHT - 160 },
+        text: {
+          talkedCount: 0,
+          start: ['t01'],
+          t01: { text: '"纸张上的字迹几乎无法辨识."', selection: '', next: 'end' },
+        }
+      }));
+      npcUnits.push(new NPC({
+        nw: { x: 600, y: GROUND_CANVAS_HEIGHT * DEF_GIRD_HEIGHT - 160 + 58 },
+        se: { x: 600 + 22, y: GROUND_CANVAS_HEIGHT * DEF_GIRD_HEIGHT - 160 },
+        text: {
+          talkedCount: 0,
+          start: ['t01'],
+          t01: { text: '"啊，圣光..."', selection: '', next: 'end' },
+        }
+      }));
+      npcUnits.push(new NPC({
+        nw: { x: 640, y: GROUND_CANVAS_HEIGHT * DEF_GIRD_HEIGHT - 160 + 63 },
+        se: { x: 640 + 26, y: GROUND_CANVAS_HEIGHT * DEF_GIRD_HEIGHT - 160 },
+        text: {
+          talkedCount: 0,
+          start: ['t01', 't11'],
+          t01: { text: '赐福啊赐福，神圣的光芒...', selection: '', next: 'end' },
+          t11: { text: '没有赐福的你，只得死得默默无名...', selection: '', next: 'end' },
+        }
+      }));
+      npcUnits.push(new NPC({
+        nw: { x: 680, y: GROUND_CANVAS_HEIGHT * DEF_GIRD_HEIGHT - 160 + 59 },
+        se: { x: 680 + 27, y: GROUND_CANVAS_HEIGHT * DEF_GIRD_HEIGHT - 160 },
+        text: {
+          talkedCount: 0,
+          start: ['t01'],
+          t01: { text: '"请给我们指引..."', selection: '', next: 'end' },
+        }
+      }));
+    }
+    function toggleVoice() {
+      if (player.audioPlayer.ismuted) {
+        player.audioPlayer.unmutedAll();
+        voiceButton.style.backgroundColor = 'rgba(255, 255, 255, 0.521)';
+      } else {
+        player.audioPlayer.mutedAll();
+        voiceButton.style.backgroundColor = 'rgba(148, 148, 148, 0.521)';
+      }
+    }
+
+    loadBackground();
+    loadGroundGrid();
+    loadTempNPCs();
+
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    voiceButton.addEventListener('click', toggleVoice);
+    voiceButton.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      toggleVoice();
+    });
+    [leftButton, rightButton, jumpButton, actButton].forEach((e, index) => {
+      const btn = ['KeyA', 'KeyD', 'Space', 'KeyE'];
+      e.addEventListener('touchstart', () => window.dispatchEvent(new KeyboardEvent("keydown", { code: btn[index] })));
+      e.addEventListener('touchend', () => window.dispatchEvent(new KeyboardEvent("keyup", { code: btn[index] })));
+    });
+  </script>
+</body>
+
+</html>

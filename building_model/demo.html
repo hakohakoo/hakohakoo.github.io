@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>building 15th in AHNU</title>
+    <style type="text/css">
+        body {
+            overflow: hidden;
+            margin: 0;
+        }
+
+        #info {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+        }
+
+        #text {
+            display: none;
+        }
+
+        #color-text1 {
+            background: linear-gradient(to right, rgb(255, 127, 22), rgb(0, 132, 255));
+            font-weight: 700;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="info">
+        <div id="info-line1">模型已经加载了 <b id="load-percent">0</b> %，请耐心等待。</br></div>
+        电脑端：左键旋转，滚轮放大，右键平移。</br>
+        手机端：单指旋转，双指放大和平移。</br>
+        <button id="create-teapot">点击随机生成一个茶壶！</button></br>
+        <button id="create-color-character">点击生成一个<span id="color-text1">彩色</span>卡通人物！</button>
+    </div>
+</body>
+
+<script src="https://threejs.org/build/three.min.js"></script>
+<script src="https://threejs.org/examples/js/loaders/OBJLoader.js"></script>
+<script src="https://threejs.org/examples/js/loaders/ColladaLoader.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+<script>
+    // 加载进度和删除 yaml 标识
+    const loadPercent = document.getElementById('load-percent');
+    document.getElementsByTagName('body')[0].removeChild(document.getElementsByTagName('body')[0].childNodes[0]);
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xF5F5F5);
+
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(40, 40, -20);
+
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+    // 灯光效果
+    const light2 = new THREE.AmbientLight(0xffffff, 0.5);
+    const light1 = new THREE.HemisphereLight(0xffffff, 0x000000, 0.9);
+    light1.position.setScalar(10);
+    light1.position.set(0, 30, 300);
+
+    scene.add(light1);
+    scene.add(light2);
+
+    // 创建茶壶
+    document.getElementById('create-teapot').addEventListener('click', function () {
+        new THREE.OBJLoader().load('./teaPot.obj', function (object) {
+            object.position.set(randomNum(10, 30), randomNum(0, 30), randomNum(-30, 30));
+            object.rotation.x = -Math.PI * 0.5;
+            object.scale.set(0.5, 0.5, 0.5);
+            scene.add(object);
+        });
+    });
+
+    // 创建彩色人物
+    let CREATE_COLOR_CHARACTER = 0;
+    document.getElementById('create-color-character').addEventListener('click', function () {
+        if (!CREATE_COLOR_CHARACTER) {
+            CREATE_COLOR_CHARACTER = 1;
+            let elf;
+            const loadingManager = new THREE.LoadingManager(function () { scene.add(elf) });
+            const loader = new THREE.ColladaLoader(loadingManager);
+            loader.load('./elf/elf.dae', function (collada) {
+                collada.scene.rotation.z = Math.PI * 0.5;
+                collada.scene.position.set(10, 0, 0);
+                elf = collada.scene;
+            });
+        }
+    });
+
+    // 主楼
+    new THREE.OBJLoader().load('./demo1.obj', function (object) {
+        object.rotation.x = -Math.PI * 0.5;
+        object.scale.set(0.5, 0.5, 0.5);
+        let box = new THREE.Box3().setFromObject(object);
+        let box3Helper = new THREE.Box3Helper(box);
+        scene.add(box3Helper);
+        scene.add(object);
+    }, function (xhr) {
+        let num = (xhr.loaded / xhr.total * 100).toFixed(2);
+        if (num == 100.00 || num == Infinity) loadPercent.parentElement.innerHTML = '模型已加载完成。';
+        else loadPercent.innerHTML = num;
+    }, function (err) {
+        alert(err);
+    });
+
+    function render() {
+        requestAnimationFrame(render);
+        renderer.render(scene, camera);
+    }
+    render();
+
+    //生成从minNum到maxNum的随机数
+    function randomNum(minNum, maxNum) {
+        switch (arguments.length) {
+            case 1:
+                return parseInt(Math.random() * minNum + 1, 10);
+                break;
+            case 2:
+                return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
+                break;
+            default:
+                return 0;
+                break;
+        }
+    }
+</script>
+
+</html>

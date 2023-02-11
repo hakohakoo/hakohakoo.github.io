@@ -1,0 +1,305 @@
+@keyframes player--idle {
+  100% {
+    background-position: -205px -16px;
+  }
+}
+
+@-webkit-keyframes player--idle {
+  100% {
+    background-position: -205px -16px;
+  }
+}
+
+@keyframes player--run {
+  100% {
+    background-position: -275px -16px;
+  }
+}
+
+@-webkit-keyframes player--run {
+  100% {
+    background-position: -275px -16px;
+  }
+}
+
+@keyframes text-box_triangle {
+  100% {
+    margin: 1.2px 0 0 0;
+  }
+}
+
+@-webkit-keyframes text-box_triangle {
+  100% {
+    margin: 1.2px 0 0 0;
+  }
+}
+
+@keyframes tips-box {
+  100% {
+    margin: 1px 0 0 0;
+  }
+}
+
+@-webkit-keyframes tips-box {
+  100% {
+    margin: 1px 0 0 0;
+  }
+}
+
+@keyframes typing {
+  0% {
+    width: 0px
+  }
+
+  100% {
+    width: 220px;
+  }
+}
+
+@-webkit-keyframes typing {
+  0% {
+    width: 0px
+  }
+
+  100% {
+    width: 220px;
+  }
+}
+
+@keyframes typing1 {
+  0% {
+    width: 0px
+  }
+
+  100% {
+    width: 220px;
+  }
+}
+
+@-webkit-keyframes typing1 {
+  0% {
+    width: 0px
+  }
+
+  100% {
+    width: 220px;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+html,
+body {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 10vh 0;
+}
+
+.canvas {
+  position: relative;
+  overflow: hidden;
+  width: 320px;
+  height: 224px;
+  margin: 0 auto;
+}
+
+.ground-grid {
+  position: absolute;
+  width: 1056px;
+  border-spacing: unset;
+}
+
+td {
+  width: 32px;
+  height: 32px;
+}
+
+.ground-canvas_grassa {
+  background: url('./img/Texture/ground.png') no-repeat 0 0;
+}
+
+.ground-canvas_grassb {
+  background: url('./img/Texture/ground.png') no-repeat -32px 0;
+}
+
+.ground-canvas_grassc {
+  background: url('./img/Texture/ground.png') no-repeat -64px 0;
+}
+
+.ground-canvas_grassd {
+  background: url('./img/Texture/ground.png') no-repeat 0 -32px;
+}
+
+.ground-canvas_grasse {
+  background: url('./img/Texture/ground.png') no-repeat -32px -32px;
+}
+
+.ground-canvas_grassf {
+  background: url('./img/Texture/ground.png') no-repeat -64px -32px;
+}
+
+.ground-canvas_grassg {
+  background: url('./img/Texture/ground.png') no-repeat 0 -64px;
+}
+
+.ground-canvas_grassh {
+  background: url('./img/Texture/ground.png') no-repeat -32px -64px;
+}
+
+.ground-canvas_grassq {
+  background: url('./img/Texture/ground.png') no-repeat -64px -64px;
+}
+
+.ground-canvas_grassr {
+  background: url('./img/Texture/ground.png') no-repeat -192px -160px;
+}
+
+.ground-canvas_grasss {
+  background: url('./img/Texture/ground.png') no-repeat -224px -160px;
+}
+
+/* 连接地面的柱子 */
+.ground-canvas_grassi {
+  background: url('./img/Texture/ground.png') no-repeat -128px -160px;
+}
+
+.ground-canvas_grassj {
+  background: url('./img/Texture/ground.png') no-repeat -128px -192px;
+}
+
+.ground-canvas_grassk {
+  background: url('./img/Texture/ground.png') no-repeat -128px -224px;
+}
+
+.ground-canvas_grassl {
+  background: url('./img/Texture/ground.png') no-repeat -160px -224px;
+}
+
+/* 两种平台 */
+.ground-canvas_grassm {
+  background: url('./img/Texture/ground.png') no-repeat -224px 0px;
+}
+
+.ground-canvas_grassn {
+  background: url('./img/Texture/ground.png') no-repeat -224px -32px;
+}
+
+.ground-canvas_grasso {
+  background: url('./img/Texture/ground.png') no-repeat -288px 0px;
+}
+
+.ground-canvas_grassp {
+  background: url('./img/Texture/ground.png') no-repeat -320px 0px;
+}
+
+.bg-sky {
+  position: absolute;
+  width: 320px;
+  height: 224px;
+  background: url('./img/Texture/sky.png') repeat-x;
+}
+
+.bg-canvas {
+  position: absolute;
+}
+
+.player {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+}
+
+.player--idle {
+  background: url('./img/player/eilin_idle.png') no-repeat -14px -16px;
+  -webkit-animation: player--idle 0.5s steps(3, end) infinite;
+  animation: player--idle 0.5s steps(3, end) infinite;
+}
+
+.player--run {
+  background: url('./img/player/eilin_run.png') no-repeat -14px -16px;
+  -webkit-animation: player--run 0.5s steps(4, end) infinite;
+  animation: player--run 0.5s steps(4, end) infinite;
+}
+
+.reverse {
+  transform: scaleX(-1);
+}
+
+.tips-box {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  margin: 0 0 0 0;
+  background: url('./img/icons/keyboard.png') no-repeat -32px 0px;
+  -webkit-animation: tips-box 1s steps(4, end) infinite;
+  animation: tips-box 1s steps(4, end) infinite;
+}
+
+.text-box {
+  position: absolute;
+  left: 50px;
+  top: 10px;
+  width: 228px;
+  height: 15px;
+  font-size: 12px;
+  font-family: 'SimSun';
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-shadow: rgba(255, 255, 255, 0.781) -1px 1px 0px, rgba(255, 255, 255, 0.781) 1px 1px 0px, rgba(255, 255, 255, 0.781) 1px -1px 0px, rgba(255, 255, 255, 0.781) -1px -1px 0px;
+}
+
+.text-box_content {
+  float: left;
+}
+
+.text-box_triangle {
+  float: left;
+  margin: 0 0 0 0;
+  font-weight: 100;
+  -webkit-animation: text-box_triangle 1s steps(2, end) infinite;
+  animation: text-box_triangle 1s steps(2, end) infinite;
+}
+
+.touch-button {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.521);
+  border: 1px solid rgba(255, 255, 255, 0);
+  border-radius: 40px;
+  line-height: 40px;
+  color: rgba(58, 58, 58, 0.521);
+  font-size: 20px;
+  text-align: center;
+}
+
+.voice-button {
+  right: 10px;
+  top: 0px;
+}
+
+.left-button {
+  left: 10px;
+  bottom: 0;
+}
+
+.right-button {
+  left: 60px;
+  bottom: 0;
+}
+
+.jump-button {
+  right: 10px;
+  bottom: 0;
+}
+
+.act-button {
+  right: 60px;
+  bottom: 20px;
+}

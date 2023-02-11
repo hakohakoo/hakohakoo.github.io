@@ -1,0 +1,480 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+  <title>JavaScript数据结构04——栈与队列的应用2 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.10","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>waterbox_Usagi</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/banner.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="JavaScript数据结构04——栈与队列的应用2">
+              
+                JavaScript数据结构04——栈与队列的应用2
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-06-02 22:00" pubdate>
+        2021年6月2日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.7k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      21
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">JavaScript数据结构04——栈与队列的应用2</h1>
+            
+            <div class="markdown-body">
+              <blockquote>
+<p>本系列将参照《数据结构(C语言版)》第2版 (严蔚敏等) ，使用 JavaScript 的方式复现书中的代码，以用于复习数据结构和 ES 语法。本文对应书中第三章 栈和队列 的第六节内容，即案列分析与实现。</p>
+</blockquote>
+<h2 id="案例分析"><a href="#案例分析" class="headerlink" title="案例分析"></a>案例分析</h2><p>任何一个表达式都是由操作数 (operand)、运算符 (operator) 和界限符 (delimiter) 组成的，统称它们为单词。一般地，操作数既可以是常数，也可以是被说明为变量或常量的标识符；运算符可以分为算术运算符、关系运算符和逻辑运算符 3 类；基本界限符有左右括号和表达式结束符等。为了叙述的简洁，在此仅讨论简单算术表达式的求值问题，这种表达式只含加、减、乘、除 4 种运算符。</p>
+</br>
+
+<p>我们知道，算术四则运算遵循以下 3 条规则：</p>
+<ul>
+<li>先乘除，后加减；</li>
+<li>从左算到右；</li>
+<li>先括号内，后括号外。 </li>
+</ul>
+</br>
+
+<p>根据上述 3 条运算规则，在运算的每一步中，任意两个相继出现的算符 A 和 B 之间的优先关系，至多是大于、小于和等于。表中定义了这种优先关系：</p>
+<p><img src="/post_img/jsA42/1.png" srcset="/img/loading.gif" lazyload></p>
+<p><em>没错，我就是这么懒(<del>￣▽￣)</del></em></p>
+<h2 id="算法步骤"><a href="#算法步骤" class="headerlink" title="算法步骤"></a>算法步骤</h2><p>初始化 OPTR 栈和 OPND 栈，将表达式起始符 “#” 压入OPTR栈。</p>
+<p>扫描表达式，读入第一个字符 ch,，如果表达式没有扫描完毕至 “#” 或 OPTR 的栈顶元素不为 “#” 时，则循环执行以下操作：</p>
+<ul>
+<li><p>若 ch 不是运算符，则压入 OPND 栈，读入下一字符 ch；</p>
+</li>
+<li><p>若 ch 是运算符，则根据 OPTR 的栈顶元素和 ch 的优先级比较结果，做不同的处理；</p>
+<ul>
+<li><p>若是小于，则 ch 压入 OPTR 栈，读入下一字符 ch；</p>
+</li>
+<li><p>若是大于，则弹出 OPTR 栈顶的运算符，从 OPND 栈弹出两个数，进行相应运算，结果压入 OPND 栈；</p>
+</li>
+<li><p>若是等于，则 OPTR 的栈顶元素是 “(“ 且 ch 是 “)” 这时弹出 OPTR 栈顶的 “(“，相当于括号匹配成功，然后读入下一字符 ch。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>OPND 栈顶元素即为表达式求值结果，返回此元素。</p>
+<h2 id="算法实现与分析"><a href="#算法实现与分析" class="headerlink" title="算法实现与分析"></a>算法实现与分析</h2><p>首先为了方便起见，包装一个用于简单运算和用于比较运算符优先级的函数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//运算函数</span><br><span class="hljs-comment">//注意这里面传入的第一个num被放在了第二位，这是因为栈的位置导致的问题</span><br><span class="hljs-comment">//例如 4 - 1，入栈后出栈的顺序先是1后是4，所以第一个pop的数字应该被放在第二位</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Calculation</span>(<span class="hljs-params">num2, operator, num1</span>) </span>&#123;<br>  <span class="hljs-keyword">switch</span> (operator) &#123;<br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;+&quot;</span>:<br>      <span class="hljs-keyword">return</span> num1 + num2;<br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;-&quot;</span>:<br>      <span class="hljs-keyword">return</span> num1 - num2;<br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;*&quot;</span>:<br>      <span class="hljs-keyword">return</span> num1 * num2;<br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;/&quot;</span>:<br>      <span class="hljs-keyword">return</span> num1 / num2;<br>  &#125;<br>&#125;<br><br><span class="hljs-comment">//在主函数中会定义以下的对象用于映射符号到数字上</span><br><span class="hljs-comment">//let operatorSign = &#123; &quot;+&quot;: 0, &quot;-&quot;: 1, &quot;*&quot;: 2, &quot;/&quot;: 3, &quot;(&quot;: 4, &quot;)&quot;: 5, &quot;#&quot;: 6 &#125;;</span><br><span class="hljs-comment">//这样使用函数的时候传入的是数字，传出的也是数字</span><br><span class="hljs-comment">//为什么要这么设计呢？我也不知道，写完了才觉得这么写显得很傻(~￣▽￣)~</span><br><br><span class="hljs-comment">//比较两个符号的优先级，其中1表示op1优先，0表示op2优先，-1表示优先级相等</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">operationComparison</span>(<span class="hljs-params">op1, op2</span>) </span>&#123;<br>  <span class="hljs-keyword">let</span> operatorComparisonArray = [<br>    [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],<br>    [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],<br>    [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],<br>    [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],<br>    [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, -<span class="hljs-number">1</span>, <span class="hljs-number">1</span>],<br>    [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],<br>    [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>],<br>  ];<br><br>  <span class="hljs-keyword">return</span> operatorComparisonArray[op1][op2];<br>&#125;<br></code></pre></td></tr></table></figure>
+
+</br>
+
+<p>然后实现主函数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//主函数实现</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">EvaluateExpression</span>(<span class="hljs-params">expression</span>) </span>&#123;<br>  <span class="hljs-keyword">let</span> operatorSign = &#123; <span class="hljs-string">&quot;+&quot;</span>: <span class="hljs-number">0</span>, <span class="hljs-string">&quot;-&quot;</span>: <span class="hljs-number">1</span>, <span class="hljs-string">&quot;*&quot;</span>: <span class="hljs-number">2</span>, <span class="hljs-string">&quot;/&quot;</span>: <span class="hljs-number">3</span>, <span class="hljs-string">&quot;(&quot;</span>: <span class="hljs-number">4</span>, <span class="hljs-string">&quot;)&quot;</span>: <span class="hljs-number">5</span>, <span class="hljs-string">&quot;#&quot;</span>: <span class="hljs-number">6</span> &#125;;<br>  <span class="hljs-comment">//储存数字的栈</span><br>  <span class="hljs-keyword">let</span> numStack = [];<br>  <span class="hljs-comment">//储存运算符的栈</span><br>  <span class="hljs-keyword">let</span> operatorStack = [];<br>  <span class="hljs-comment">//默认输入的表达式字符串中数字和符号用空格隔开且语法符合规则</span><br>  <span class="hljs-keyword">let</span> formulaArr = expression.split(<span class="hljs-string">&quot; &quot;</span>);<br>  <span class="hljs-comment">//读入第一个字符</span><br>  <span class="hljs-keyword">let</span> char = formulaArr.shift();<br>  <span class="hljs-comment">//将#压入栈中</span><br>  operatorStack.push(<span class="hljs-string">&quot;#&quot;</span>);<br><br>  <span class="hljs-comment">//只有当栈底为#同时读入的字符为#才停止循环</span><br>  <span class="hljs-keyword">while</span> (char != <span class="hljs-string">&quot;#&quot;</span> || operatorStack[operatorStack.length - <span class="hljs-number">1</span>] != <span class="hljs-string">&#x27;#&#x27;</span>) &#123;<br>    <span class="hljs-comment">//如果字符不是运算符，则压入数字栈，并读取下一个字符</span><br>    <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">Object</span>.keys(operatorSign).includes(char)) &#123;<br>      numStack.push(<span class="hljs-built_in">parseFloat</span>(char));<br>      char = formulaArr.shift();<br>    &#125;<br>    <span class="hljs-keyword">else</span> &#123;<br>      <span class="hljs-keyword">switch</span> (<br>      operationComparison(operatorSign[operatorStack[operatorStack.length - <span class="hljs-number">1</span>]], operatorSign[char])<br>      ) &#123;<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br>          <span class="hljs-comment">//应该注意这里并没有读入下一个字符</span><br>          <span class="hljs-comment">//因为运算符栈内可能不止一个运算符，可能有许多个，需要用读入的字符依次与栈内的运算符进行比较</span><br>          <span class="hljs-comment">//直到栈内的运算符小于等于新字符的优先级，压入新字符，或者与同优先级的运算符消掉</span><br>          numStack.push(<br>            Calculation(numStack.pop(), operatorStack.pop(), numStack.pop())<br>          );<br>          <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>:<br>          operatorStack.push(char);<br>          char = formulaArr.shift();<br>          <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">case</span> -<span class="hljs-number">1</span>:<br>          operatorStack.pop();<br>          char = formulaArr.shift();<br>      &#125;<br>    &#125;<br>  &#125;<br>  <span class="hljs-comment">//最终数字栈栈顶即为结果</span><br>  <span class="hljs-built_in">console</span>.log(numStack.pop());<br>&#125;<br><br><span class="hljs-comment">//末尾一定要加#，否则会陷入死循环</span><br>EvaluateExpression(<span class="hljs-string">&quot;1 + 1 #&quot;</span>); <span class="hljs-comment">//2</span><br>EvaluateExpression(<span class="hljs-string">&quot;( 1 + 1 ) * 10 / 5 - 10 #&quot;</span>); <span class="hljs-comment">//-6</span><br></code></pre></td></tr></table></figure>
+
+</br>
+
+<p>我个人觉得算式末尾加一个 # 让人不爽，同时开头读入第一个字符和压 # 入栈让整个函数没有了整体性，所以个人在此基础上做了进一步考虑：将传入的算式划分成为符号数组，例如 [‘1’, ‘+’, ‘1’ ]，然后逐个符号遍历。但通过第一种实现方法可以知道，当栈顶运算符的优先级大于输入字符，将栈顶运算符pop运算后，并不会立刻读入新字符，而是将比较后的新字符与新的栈顶运算符再次比较，直到栈顶运算符的优先级小于等于新字符。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">EvaluateExpression2</span>(<span class="hljs-params">expression</span>) </span>&#123;<br>  <span class="hljs-keyword">let</span> operatorSign = &#123; <span class="hljs-string">&quot;+&quot;</span>: <span class="hljs-number">0</span>, <span class="hljs-string">&quot;-&quot;</span>: <span class="hljs-number">1</span>, <span class="hljs-string">&quot;*&quot;</span>: <span class="hljs-number">2</span>, <span class="hljs-string">&quot;/&quot;</span>: <span class="hljs-number">3</span>, <span class="hljs-string">&quot;(&quot;</span>: <span class="hljs-number">4</span>, <span class="hljs-string">&quot;)&quot;</span>: <span class="hljs-number">5</span>, <span class="hljs-string">&quot;#&quot;</span>: <span class="hljs-number">6</span> &#125;;<br>  <span class="hljs-keyword">let</span> numStack = [];<br>  <span class="hljs-keyword">let</span> operatorStack = [];<br><br>  <span class="hljs-comment">//读入算式后划分为符号数组遍历</span><br>  <span class="hljs-comment">//例如传入1 + 1，那么就会遍历[&#x27;1&#x27;, &#x27;+&#x27;, &#x27;1&#x27;]</span><br>  expression.split(<span class="hljs-string">&#x27; &#x27;</span>).forEach(<span class="hljs-function"><span class="hljs-params">char</span> =&gt;</span> &#123;<br>    <span class="hljs-comment">//如果符号是非运算符，则压入数字栈</span><br>    <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">Object</span>.keys(operatorSign).includes(char)) numStack.push(<span class="hljs-built_in">parseFloat</span>(char));<br>    <span class="hljs-keyword">else</span><br>      <span class="hljs-comment">//这里设置一个只能通过break才能脱出的循环，当栈内运算符小于等于新字符或者栈内为空时，才会脱出循环并读入新字符</span><br>      <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) &#123;<br>        <span class="hljs-keyword">if</span> (operatorStack.length == <span class="hljs-number">0</span>) &#123; operatorStack.push(char); <span class="hljs-keyword">break</span>; &#125;<br>        <span class="hljs-comment">//获取比较的结果</span><br>        <span class="hljs-keyword">let</span> compareTemp;<br>        <span class="hljs-keyword">if</span> (operatorStack.length != <span class="hljs-number">0</span>)<br>          compareTemp = operationComparison(operatorSign[operatorStack[operatorStack.length - <span class="hljs-number">1</span>]], operatorSign[char]);<br>        <span class="hljs-comment">//当栈内运算符大于新字符的优先级，运算并继续进行循环，直到出现其他情况</span><br>        <span class="hljs-keyword">if</span> (compareTemp == <span class="hljs-number">1</span>)<br>          numStack.push(Calculation(numStack.pop(), operatorStack.pop(), numStack.pop()));<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (compareTemp == <span class="hljs-number">0</span>) &#123;<br>          operatorStack.push(char);<br>          <span class="hljs-keyword">break</span>;<br>        &#125;<br>        <span class="hljs-keyword">else</span> &#123;<br>          operatorStack.pop();<br>          <span class="hljs-keyword">break</span>;<br>        &#125;<br>      &#125;<br>  &#125;)<br>  <span class="hljs-built_in">console</span>.log(Calculation(numStack.pop(), operatorStack.pop(), numStack.pop()));<br>&#125;<br></code></pre></td></tr></table></figure>
+
+</br>
+
+<p><strong>高情商：本题目主要要考虑读入字符的时机问题，思考清楚后就很容易了。</strong></p>
+<p><strong>低情商：坑真nm的多。</strong></p>
+<p><img src="/post_img/jsA42/2.jpg" srcset="/img/loading.gif" lazyload></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%8A%80%E6%9C%AF%E7%B3%BB%E5%88%97/">算法与技术系列</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/06/03/jsA5/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">JavaScript数据结构05——树与二叉树的术语和性质</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/05/31/jsA4/">
+                        <span class="hidden-mobile">JavaScript数据结构04——栈与队列的应用</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
