@@ -1,3 +1,7 @@
 p {
     text-align: justify;
 }
+
+.index-img img {
+    box-shadow: unset;
+}
